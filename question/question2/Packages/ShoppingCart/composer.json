@@ -1,0 +1,19 @@
+{
+    "name": "hiskio/shoppingcart",
+    "description": "shoppingcart",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chuan-Jing",
+            "email": "g9o5n2e8@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Hiskio\\Shoppingcart\\": "src/"
+        }
+    }
+}

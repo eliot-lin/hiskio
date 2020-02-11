@@ -1,0 +1,24 @@
+{
+    "name": "hiskio/shoppingcart",
+    "description": "shoppingcart",
+    "type": "library",
+    "require": {
+        "php": "7.1.1"
+    },
+    "require-dev": {
+        "php": "7.1.1"
+    },
+    "authors": [
+        {
+            "name": "Chuan-Jing",
+            "email": "g9o5n2e8@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Hiskio\\Shoppingcart\\": "hiskio/shoppingcart/src"
+        }
+    }
+}
