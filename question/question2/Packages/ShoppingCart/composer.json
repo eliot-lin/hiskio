@@ -15,5 +15,12 @@
         "psr-4": {
             "Hiskio\\Shoppingcart\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hiskio\\Shoppingcart\\CartServiceProvider"
+            ]
+        }
     }
 }
