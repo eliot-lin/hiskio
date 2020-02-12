@@ -29,7 +29,7 @@
         @foreach ($carts as $cart)
             <tr>
                 <form action="del" method="post">
-                    　<td><input id="{{ $cart->id }}" type="checkbox" name="id" value="{{ $cart->id }}" onchange="ifChecked(this)"></td>
+                    　<td><input id="{{ $cart->id }}" class="cb" type="checkbox" name="cart" value="{{ $cart->id }}" onchange="ifChecked(this)"></td>
                     　<td>{{ $cart->name }}</td>
                     　<td>{{ $cart->price }}</td>
                     　<td>{{ $cart->amount }}</td>
@@ -42,13 +42,18 @@
     <hr size="3px" align="center" width="100%">
     
     <div>
+        <div style="text-align:center; color:cadetblue; font-size: 24px;margin-bottom: 30px;">購物車</div>
         <table border="1" style="width: 50%; display: block; text-align:center;  margin-left:auto; margin-right:auto; margin-bottom: 30px;">
-            <tr>
-                <td style="width: 1%"></td>
-                <td style="width: 3%">商品名稱</td>
-                <td style="width: 3%">價格</td>
-                <td style="width: 3%">庫存</td>
-            </tr>
+            <thead>
+                <tr>
+                    <td style="width: 1%"></td>
+                    <td style="width: 3%">商品名稱</td>
+                    <td style="width: 3%">價格</td>
+                    <td style="width: 3%">庫存</td>
+                </tr>
+            </thead>
+            <tbody id="cartbody">
+            </tbody>
         </table>
     </div>
 
@@ -59,16 +64,48 @@
         }
 
         function ifChecked ($this) {
+            var selectedValue = []
+
+            $('.cb').each(function(idx, el){
+                if($(el).is(':checked'))
+                { 
+                    selectedValue.push($(el).val());
+                }
+            });
+
             $.ajax({
                 type: "POST", 
                 url: "/cache", 
                 dataType: "json", 
                 data: { 
                     checked: $this.checked, 
-                    id: $this.id
+                    id: $this.id,
+                    ids: selectedValue,
                 },
                 success: function(data) {
-                    console.log(data);
+                    var trHTML = '';
+
+                        $.each(data, function (i, cart) {
+                            for (i = 0; i < cart.length; i++) {
+                                trHTML +=
+                                    '<tr>' +
+                                        '<td></td>' + 
+                                        '<td>' + cart[i].name + '</td>' +
+                                        '<td>' + cart[i].price + '</td>' +
+                                        '<td>' + cart[i].amount + '</td>' +
+                                    '</tr>';
+                            }
+                        });
+                    
+                    trHTML +=
+                        '<tr>' +
+                            '<td>總和</td>' + 
+                            '<td></td>' + 
+                            '<td>' + data.sum + '</td>' +
+                            '<td></td>' + 
+                        '</tr>';
+
+                    $('#cartbody').html(trHTML);
                 },
                 error: function(jqXHR) {
                     console.log(jqXHR);

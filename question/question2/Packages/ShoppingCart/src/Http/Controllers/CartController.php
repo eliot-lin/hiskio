@@ -5,7 +5,8 @@ namespace Hiskio\Shoppingcart\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Hiskio\Shoppingcart\Models\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class CartController extends Controller
 {
@@ -32,10 +33,22 @@ class CartController extends Controller
 
     public function cache(Request $request)
     {
-        $redis = Redis::connection('cache');
+        if ($request->checked == 'true') {
+            Cache::remember($request->id, 60, function() use ($request) {
+                return Cart::find($request->id)->toArray();
+            });
+        } else {
+            Cache::forget($request->id);
+        }
 
-        $redis->set('foo', 'bar');
+        $sum = 0;
 
-        return $redis->get('foo');
+        foreach($request->ids as $cartId) {
+            $data[] = Cache::get($cartId);
+
+            $sum += data_get(Arr::last($data), 'price');
+        }
+        
+        return response()->json(['data' => $data, 'sum' => $sum]);
     }
 }
